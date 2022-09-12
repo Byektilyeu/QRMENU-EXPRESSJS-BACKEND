@@ -4,10 +4,19 @@ var db = {};
 
 const sequelize = new Sequelize("test-db", "user", "pass", {
   dialect: "sqlite",
-  host: "./dev.sqlite33",
+  host: "./Menu.db",
 });
 
-const models = [require("../models/sequelize/menu")];
+const models = [
+  require("../models/sequelize/Menu"),
+  require("../models/sequelize/CategList"),
+  require("../models/sequelize/MenuItems"),
+  require("../models/sequelize/Price"),
+  require("../models/sequelize/User"),
+  require("../models/sequelize/RKOrderMenu"),
+  require("../models/sequelize/Table"),
+  require("../models/sequelize/HallPlans"),
+];
 
 models.forEach((model) => {
   const seqModel = model(sequelize, Sequelize);

@@ -7,9 +7,18 @@ var morgan = require("morgan");
 // const logger = require("./middleware/logger");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
+const cors = require("cors");
 
 // Router oruulj ireh
+const hallPlanRoutes = require("./routes/hallPlans");
+const tableRoutes = require("./routes/tables");
 const menuRoutes = require("./routes/menu");
+const categListRoutes = require("./routes/categList");
+const menuItemsRoutes = require("./routes/menuItems");
+const priceRoutes = require("./routes/price");
+const usersRoutes = require("./routes/users");
+const getOrderRoutes = require("./routes/rKOrderMenu");
+
 const injectDb = require("./middleware/injectDb");
 
 var cookieParser = require("cookie-parser");
@@ -28,6 +37,23 @@ var accessLogStream = rfs.createStream("access.log", {
   interval: "1d", // rotate daily
   path: path.join(__dirname, "log"),
 });
+
+// cors tohirgoo
+var whitelist = ["http://10.0.0.116:3000"];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (origin === undefined || whitelist.indexOf(origin) !== -1) {
+      //bolno
+      callback(null, true);
+    } else {
+      //bolohgui
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  allowedHeaders: "Authorization, Set-Cookie, Content-Type",
+  methods: "GET, POST, PUT, DELETE",
+  credentials: true,
+};
 
 // index.html-ийг public хавтас дотроос ол гэсэн тохиргоо
 app.use(express.static(path.join(__dirname, "public")));
@@ -49,30 +75,42 @@ app.use(hpp());
 // Body parser
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors(corsOptions));
 // app.use(logger);
 app.use(helmet());
 app.use(xss());
 // to  remove data, use
-app.use(mongoSanitize());
+// app.use(mongoSanitize());
 // app.use(fileUpload());
 // app ruu middleqare-iig holbohdoo USE gedgiig hereglene
 app.use(injectDb(db));
 app.use(morgan("combined", { stream: accessLogStream }));
 // // use gedgiig ahsiglan turul buriin middleware-uudiig holboj uguh bolomjtoi
+app.use("/api/v1/category", categListRoutes);
+app.use("/api/v1/categories", categListRoutes);
+app.use("/api/v1/users", usersRoutes);
+
+app.use("/api/v1/hallplans", hallPlanRoutes);
+app.use("/api/v1/tables", tableRoutes);
 
 app.use("/api/v1/menu", menuRoutes);
+// app.use("/api/v1/:Ident/menu", categListRoutes);
+app.use("/api/v1/menuitems", menuItemsRoutes);
+app.use("/api/v1/price", priceRoutes);
+
+app.use("/api/v1/getorder", getOrderRoutes);
+
+// app.use("/api/v1/login", usersRoutes);
 
 app.use(errorHandler);
 
-//mysql-tei sync hiij bna
+//sqlite-tei sync hiij bna
 db.sequelize
   .sync()
   .then((result) => {
     console.log("sync hiigdlee");
   })
   .catch((err) => console.log(err));
-
-// db.sync({ force: true }).then(() => console.log("db is ready"));
 
 app.listen(
   process.env.PORT,

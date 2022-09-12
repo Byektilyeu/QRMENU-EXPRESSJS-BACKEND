@@ -2,25 +2,27 @@ const MyError = require("../utils/myError");
 const asyncHandler = require("express-async-handler");
 
 exports.getMenu = asyncHandler(async (req, res, next) => {
-  const menu = await req.db.Menu.findAll();
-  console.log(
-    "menu____________________________________________________________________",
-    menu
+  // sqlite-iig query bishij data avj bna
+  const [result] = await req.db.sequelize.query(
+    "SELECT * FROM MenuItems JOIN Price ON MenuItems.menuIdent = Price.menuPriceObjectID"
   );
+
   res.status(200).json({
     success: true,
-    data: menu,
+    count: result.length,
+    data: result,
   });
 });
 
-exports.createMenu = asyncHandler(async (req, res, next) => {
-  // const menu = await req.db.Menu.findAll();
+exports.getCategoryMenu = asyncHandler(async (req, res, next) => {
+  const [categMenu] = await req.db.sequelize.query(
+    // `SELECT * FROM price_value WHERE mainParentIdent = ${req.body.category}`
+    `SELECT * FROM price_value JOIN RKOrderMenu ON price_value.menuIdent = RKOrderMenu.identOrderMenu WHERE mainParentIdent = ${req.body.category}`
+  );
 
-  console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++", req.body);
-  console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++", req.db);
-  const menu = await req.db.Menu.create(req.body);
   res.status(200).json({
     success: true,
-    data: menu,
+    count: categMenu.length,
+    data: categMenu,
   });
 });

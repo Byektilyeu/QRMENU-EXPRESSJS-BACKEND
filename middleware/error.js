@@ -1,16 +1,9 @@
 const errorHandler = (err, req, res, next) => {
-  console.log(err.stack.cyan.underline);
+  console.log(err);
 
   const error = { ...err };
 
   error.message = err.message;
-
-  //   console.log(err);
-
-  // if (error.name === "CastError") {
-  //   error.message = "Энэ ID буруу бүтэцтэй байна";
-  //   error.statusCode = 400;
-  // }
 
   console.log(err.message);
 
