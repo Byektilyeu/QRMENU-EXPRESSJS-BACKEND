@@ -4,7 +4,7 @@ var db = {};
 
 const sequelize = new Sequelize("test-db", "user", "pass", {
   dialect: "sqlite",
-  host: "./Menu.db",
+  host: "./menu.db",
 });
 
 const models = [
@@ -16,6 +16,7 @@ const models = [
   require("../models/sequelize/RKOrderMenu"),
   require("../models/sequelize/Table"),
   require("../models/sequelize/HallPlans"),
+  require("../models/sequelize/Settings"),
 ];
 
 models.forEach((model) => {

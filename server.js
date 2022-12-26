@@ -18,6 +18,7 @@ const menuItemsRoutes = require("./routes/menuItems");
 const priceRoutes = require("./routes/price");
 const usersRoutes = require("./routes/users");
 const getOrderRoutes = require("./routes/rKOrderMenu");
+const settingsRoutes = require("./routes/settings");
 
 const injectDb = require("./middleware/injectDb");
 
@@ -40,9 +41,9 @@ var accessLogStream = rfs.createStream("access.log", {
 
 // cors tohirgoo
 var whitelist = [
-  "http://10.0.0.103:3000",
-  "http://10.0.0.116:3000",
-  "http://10.0.0.107:3000",
+  "http://192.168.1.29:3000",
+  "http://10.0.0.106:3000",
+  "http://10.0.0.100:3000",
 ];
 var corsOptions = {
   origin: function (origin, callback) {
@@ -101,6 +102,8 @@ app.use("/api/v1/menu", menuRoutes);
 // app.use("/api/v1/:Ident/menu", categListRoutes);
 app.use("/api/v1/menuitems", menuItemsRoutes);
 app.use("/api/v1/price", priceRoutes);
+
+app.use("/api/v1/settings", settingsRoutes);
 
 app.use("/api/v1/getorder", getOrderRoutes);
 
