@@ -8,6 +8,7 @@ var morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 const cors = require("cors");
+const connectDB = require("./config/db");
 
 // Router oruulj ireh
 const hallPlanRoutes = require("./routes/hallPlans");
@@ -19,6 +20,10 @@ const priceRoutes = require("./routes/price");
 const usersRoutes = require("./routes/users");
 const getOrderRoutes = require("./routes/rKOrderMenu");
 const settingsRoutes = require("./routes/settings");
+const monpayRoutes = require("./routes/monpay");
+const ordersRoutes = require("./routes/orders");
+const orderRkeeperRoutes = require("./routes/orderRkeeper");
+const settings2Routes = require("./routes/settings2");
 
 const injectDb = require("./middleware/injectDb");
 
@@ -29,6 +34,7 @@ const xss = require("xss-clean");
 
 // App-iin tohirgoog process.env ruu achaalah
 dotenv.config({ path: "./config/config.env" });
+connectDB();
 
 const app = express();
 const db = require("./config/db-sqlite");
@@ -41,9 +47,9 @@ var accessLogStream = rfs.createStream("access.log", {
 
 // cors tohirgoo
 var whitelist = [
-  "http://192.168.1.29:3000",
-  "http://10.0.0.106:3000",
-  "http://10.0.0.100:3000",
+  "http://192.168.43.96:3000",
+  "http://10.0.0.101:3000",
+  "http://10.0.0.105:3000",
 ];
 var corsOptions = {
   origin: function (origin, callback) {
@@ -103,9 +109,13 @@ app.use("/api/v1/menu", menuRoutes);
 app.use("/api/v1/menuitems", menuItemsRoutes);
 app.use("/api/v1/price", priceRoutes);
 
+app.use("/api/v1/settings2", settings2Routes);
 app.use("/api/v1/settings", settingsRoutes);
 
 app.use("/api/v1/getorder", getOrderRoutes);
+app.use("/api/v1/monpay", monpayRoutes);
+app.use("/api/v1/orders", ordersRoutes);
+app.use("/api/v1/rkeeper", orderRkeeperRoutes);
 
 // app.use("/api/v1/login", usersRoutes);
 
