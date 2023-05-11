@@ -33,9 +33,9 @@ const SettingsSchema = new mongoose.Schema({
     type: Number,
     required: [true, "stationCode zaaval oruulna uu"],
   },
-  restCode: {
+  objID: {
     type: Number,
-    required: [true, "restCode zaaval oruulna uu"],
+    required: [true, "objID zaaval oruulna uu"],
   },
 });
 

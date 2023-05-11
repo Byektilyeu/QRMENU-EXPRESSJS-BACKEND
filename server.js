@@ -19,11 +19,12 @@ const menuItemsRoutes = require("./routes/menuItems");
 const priceRoutes = require("./routes/price");
 const usersRoutes = require("./routes/users");
 const getOrderRoutes = require("./routes/rKOrderMenu");
-const settingsRoutes = require("./routes/settings");
+const settingsRoutes = require("./routes/rksettings");
 const monpayRoutes = require("./routes/monpay");
 const ordersRoutes = require("./routes/orders");
 const orderRkeeperRoutes = require("./routes/orderRkeeper");
 const settings2Routes = require("./routes/settings2");
+const restaurantsRoutes = require("./routes/restaurants");
 
 const injectDb = require("./middleware/injectDb");
 
@@ -49,7 +50,7 @@ var accessLogStream = rfs.createStream("access.log", {
 var whitelist = [
   "http://192.168.43.96:3000",
   "http://10.0.0.101:3000",
-  "http://10.0.0.105:3000",
+  "http://10.0.0.108:3000",
 ];
 var corsOptions = {
   origin: function (origin, callback) {
@@ -110,12 +111,13 @@ app.use("/api/v1/menuitems", menuItemsRoutes);
 app.use("/api/v1/price", priceRoutes);
 
 app.use("/api/v1/settings2", settings2Routes);
-app.use("/api/v1/settings", settingsRoutes);
+app.use("/api/v1/rksettings", settingsRoutes);
 
 app.use("/api/v1/getorder", getOrderRoutes);
 app.use("/api/v1/monpay", monpayRoutes);
 app.use("/api/v1/orders", ordersRoutes);
 app.use("/api/v1/rkeeper", orderRkeeperRoutes);
+app.use("/api/v1/restaurants", restaurantsRoutes);
 
 // app.use("/api/v1/login", usersRoutes);
 
