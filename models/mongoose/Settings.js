@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// Settings Schema -> mongoDB
 const SettingsSchema = new mongoose.Schema({
   IP: {
     type: String,

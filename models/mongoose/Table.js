@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
+// Tables Schema -> mongoDB
 const TableSchema = new mongoose.Schema({
+  objID: {
+    type: Number,
+    required: [true, "objID zaaval oruulna uu"],
+  },
   tableIdent: {
     type: Number,
     required: [true, "tableIdent zaaval oruulna uu"],
@@ -15,7 +20,7 @@ const TableSchema = new mongoose.Schema({
   },
   tableName: {
     type: String,
-    required: [true, "tableName zaaval oruulna uu"],
+    // required: [true, "tableName zaaval oruulna uu"],
   },
 });
 

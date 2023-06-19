@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// Restaurants Schema -> mongoDB
 const RestaurantsSchema = new mongoose.Schema({
   name: {
     type: String,

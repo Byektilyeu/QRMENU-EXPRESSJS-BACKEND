@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getTable } = require("../controller/tables");
-router.route("/").post(getTable);
+const { getTablesMongodb } = require("../controller/mongoDBContollers/tables");
+router.route("/").post(getTablesMongodb);
 
 module.exports = router;

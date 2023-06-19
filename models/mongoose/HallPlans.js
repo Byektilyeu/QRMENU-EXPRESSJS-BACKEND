@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
+// Hall plans Schema -> mongoDB
 const HallPlansSchema = new mongoose.Schema({
+  objID: {
+    type: Number,
+    required: [true, "objID zaaval oruulna uu"],
+  },
   HallPlansMainParentIdent: {
     type: Number,
     required: [true, "hallplans main parent ident zaaval oruulna uu"],

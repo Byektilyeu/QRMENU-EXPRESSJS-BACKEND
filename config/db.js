@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// mongoDB өгөгдлийн сангийн холболт
 const connectDB = async () => {
   const conn = await mongoose.connect(
     "mongodb+srv://qrMenuOrders:qrMenuOrders2023@qrmenuorders.pkn07fr.mongodb.net/test",

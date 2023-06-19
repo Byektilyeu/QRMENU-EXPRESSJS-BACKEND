@@ -5,7 +5,7 @@ const {
   createRestaurant,
   getRestaurants,
   getRestaurant,
-} = require("../controller/restaurants");
+} = require("../controller/mongoDBContollers/restaurants");
 
 router.route("/getrestaurants").post(getRestaurants);
 router.route("/createrestaurant").post(createRestaurant);

@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
+// Menu items Schema -> mongoDB
 const MenuItemsSchema = new mongoose.Schema({
+  objID: {
+    type: Number,
+    required: [true, "objID zaaval oruulna uu"],
+  },
   name: {
     type: String,
   },

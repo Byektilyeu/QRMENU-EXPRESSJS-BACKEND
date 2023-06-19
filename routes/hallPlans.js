@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { getHallPlansTables } = require("../controller/tables");
-router.route("/tables").post(getHallPlansTables);
-
-const { getHallPlans } = require("../controller/hallPlans");
-router.route("/").get(getHallPlans);
+const {
+  getHallPlans,
+  getHallPlansMongodb,
+} = require("../controller/mongoDBContollers/hallPlans");
+router.route("/").post(getHallPlans);
+router.route("/db").post(getHallPlansMongodb);
 
 module.exports = router;

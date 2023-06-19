@@ -1,3 +1,0 @@
-::1 - - [26/Jul/2022:04:40:49 +0000] "POST /api/v1/foods HTTP/1.1" 200 22062 "-" "PostmanRuntime/7.29.2"
-::1 - - [26/Jul/2022:06:17:37 +0000] "GET /api/v1/menu HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
-::1 - - [26/Jul/2022:09:52:13 +0000] "POST /api/v1/foods HTTP/1.1" 200 22062 "-" "PostmanRuntime/7.29.2"
