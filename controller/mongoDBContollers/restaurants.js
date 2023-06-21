@@ -12,6 +12,9 @@ exports.createRestaurant = asyncHandler(async (req, res, next) => {
           ID: req.body.ID,
           objID: req.body.objID,
         });
+        res.status(200).json({
+          success: true,
+        });
       } else {
         Restaurants.findOneAndUpdate(
           { objID: req.body.objID },
@@ -27,6 +30,10 @@ exports.createRestaurant = asyncHandler(async (req, res, next) => {
             if (err) {
               console.log("error", err);
             }
+            res.status(200).json({
+              success: true,
+              data: doc,
+            });
             // console.log("updated", doc);
           }
         );
@@ -35,10 +42,6 @@ exports.createRestaurant = asyncHandler(async (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
-
-  res.status(200).json({
-    success: true,
-  });
 });
 
 // get restaurant lists -> mongoDB

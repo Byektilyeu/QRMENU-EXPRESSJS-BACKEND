@@ -1,4 +1,5 @@
 const express = require("express");
+// const cluster = require("cluster");
 const dotenv = require("dotenv");
 var path = require("path");
 var rfs = require("rotating-file-stream");
@@ -31,6 +32,9 @@ const xss = require("xss-clean");
 dotenv.config({ path: "./config/config.env" });
 connectDB();
 
+// Check the number of available CPU.
+// const numCPUs = require("os").cpus().length;
+
 const app = express();
 
 // create a rotating write stream
@@ -40,7 +44,7 @@ var accessLogStream = rfs.createStream("access.log", {
 });
 
 // cors tohirgoo
-var whitelist = ["http://10.0.0.105:3000"];
+var whitelist = ["http://10.0.0.104:3000"];
 var corsOptions = {
   origin: function (origin, callback) {
     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
@@ -93,6 +97,33 @@ app.use("/api/v1/settings", settingsRoutes);
 app.use("/api/v1/restaurants", restaurantsRoutes);
 
 app.use(errorHandler);
+
+// // For Master process
+// if (cluster.isMaster) {
+//   console.log(`Master ${process.pid} is running`);
+
+//   // Fork workers.
+//   for (let i = 0; i < numCPUs; i++) {
+//     console.log("numCPUs", numCPUs);
+//     cluster.fork();
+//   }
+
+//   // This event is first when worker died
+//   cluster.on("exit", (worker, code, signal) => {
+//     console.log(`worker ${worker.process.pid} died`);
+//   });
+// }
+
+// // For Worker
+// else {
+//   // Workers can share any TCP connection
+//   // In this case it is an HTTP server
+//   app.listen(process.env.PORT, (err) => {
+//     err
+//       ? console.log("Error in server setup")
+//       : console.log(`Worker ${process.pid} started`);
+//   });
+// }
 
 app.listen(
   process.env.PORT,
