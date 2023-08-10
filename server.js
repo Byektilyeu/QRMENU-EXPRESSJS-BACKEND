@@ -1,4 +1,5 @@
 const express = require("express");
+const { Worker } = require("worker_threads");
 // const cluster = require("cluster");
 const dotenv = require("dotenv");
 var path = require("path");
@@ -19,10 +20,13 @@ const menuItemsRoutes = require("./routes/menuItems");
 const priceRoutes = require("./routes/price");
 // const getOrderRoutes = require("./routes/rKOrderMenu");
 // const monpayRoutes = require("./routes/monpay");
-// const ordersRoutes = require("./routes/orders");
-// const orderRkeeperRoutes = require("./routes/orderRkeeper");
+const ordersRoutes = require("./routes/orders");
+const orderRkeeperRoutes = require("./routes/orderRkeeper");
 const settingsRoutes = require("./routes/settings");
 const restaurantsRoutes = require("./routes/restaurants");
+const shiftsRoutes = require("./routes/shifts");
+// pass routes
+const passRoutes = require("./routes/Pass/passRoutes");
 
 var cookieParser = require("cookie-parser");
 const helmet = require("helmet");
@@ -44,7 +48,7 @@ var accessLogStream = rfs.createStream("access.log", {
 });
 
 // cors tohirgoo
-var whitelist = ["http://10.0.0.104:3000"];
+var whitelist = ["http://10.0.0.105:3000"];
 var corsOptions = {
   origin: function (origin, callback) {
     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
@@ -81,6 +85,12 @@ app.use(cors(corsOptions));
 app.use(helmet());
 app.use(xss());
 
+let worker = new Worker("./worker/workerGetSystemInfo2.js", {});
+worker.on("message", (data) => {
+  console.log(data);
+});
+console.log("serverBek ...");
+
 app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use("/api/v1/categories", categoriesRoutes);
@@ -92,9 +102,11 @@ app.use("/api/v1/price", priceRoutes);
 app.use("/api/v1/settings", settingsRoutes);
 // app.use("/api/v1/getorder", getOrderRoutes);
 // app.use("/api/v1/monpay", monpayRoutes);
-// app.use("/api/v1/orders", ordersRoutes);
-// app.use("/api/v1/rkeeper", orderRkeeperRoutes);
+app.use("/api/v1/orders", ordersRoutes);
+app.use("/api/v1/rkeeper", orderRkeeperRoutes);
 app.use("/api/v1/restaurants", restaurantsRoutes);
+app.use("/api/v1/shifts", shiftsRoutes);
+app.use("/api/v1/pass", passRoutes);
 
 app.use(errorHandler);
 

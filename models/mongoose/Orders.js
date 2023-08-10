@@ -1,51 +1,77 @@
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-// const OrdersSchema = new mongoose.Schema({
-//   // 1
-//   orderVisit: {
-//     type: Number,
-//     required: [true, "order visit zaaval oruulna uu"],
-//     unique: true,
-//   },
-//   // 2
-//   orderNumber: {
-//     type: Number,
-//     required: [true, "order number zaaval oruulna uu"],
-//   },
-//   // 3
-//   orderAmount: {
-//     type: Number,
-//     required: [true, "order amount zaaval oruulna uu"],
-//   },
-//   // 4
-//   orderGuid: {
-//     type: String,
-//     required: [true, "order guid zaaval oruulna uu"],
-//   },
-//   // 5
-//   payments: [
-//     {
-//       paymentID: String,
-//       amount: Number,
-//       paymentStatus: Boolean,
-//       invoiceNumber: Number,
-//     },
-//   ],
-//   // 6
-//   dDTD: {
-//     type: Number,
-//     unique: true,
-//   },
-//   // 7
-//   products: [
-//     {
-//       id: Number,
-//       quantity: Number,
-//       name: String,
-//       image: String,
-//       price: Number,
-//     },
-//   ],
-// });
+const OrdersSchema = new mongoose.Schema({
+  objID: {
+    type: Number,
+    unique: true,
+  },
+  shiftNum: {
+    type: Number,
+  },
+  visit: {
+    type: Number,
+    unique: true,
+  },
+  transiactionInfo: {
+    paymentName: {
+      type: String,
+    },
+    amount: {
+      type: String,
+    },
+    approval_code: {
+      type: String,
+    },
+    rrn: {
+      type: String,
+    },
+    pan: {
+      type: String,
+    },
+    date_time: {
+      type: String,
+    },
+    terminal_id: {
+      type: String,
+    },
+    payment_request_id: {
+      type: String,
+    },
+  },
+  orderDetails: {
+    orderVisit: {
+      type: Number,
+    },
+    orderNumber: {
+      type: Number,
+    },
+    orderGuid: {
+      type: String,
+    },
+    products: [
+      {
+        id: Number,
+        quantity: Number,
+        name: String,
+        image: String,
+        price: Number,
+      },
+    ],
+  },
+  payOrder: {
+    dDTD: {
+      type: String,
+    },
+    orderAmount: {
+      type: Number,
+    },
+    checkNum: {
+      type: Number,
+    },
+    closedDate: {
+      type: String,
+    },
+  },
+});
 
-// module.exports = mongoose.model("Orders", OrdersSchema);
+module.exports = mongoose.model("Orders", OrdersSchema);

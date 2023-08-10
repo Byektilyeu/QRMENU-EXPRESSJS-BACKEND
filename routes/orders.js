@@ -1,9 +1,16 @@
-// const express = require("express");
-// const router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-// const { createOrder, updateOrder } = require("../controller/orders");
+const {
+  insertOrderDetails,
+  insertOrderTransiactionInfo,
+  insertPayOrder,
+  getShiftOrders,
+} = require("../controller/mongoDBContollers/orders");
 
-// router.route("/createorder").post(createOrder);
-// router.route("/updateorder").post(updateOrder);
+router.route("/insertorderdetails").post(insertOrderDetails);
+router.route("/insertordertransiactioninfo").post(insertOrderTransiactionInfo);
+router.route("/insertpayorder").post(insertPayOrder);
+router.route("/getshiftorders").post(getShiftOrders);
 
-// module.exports = router;
+module.exports = router;

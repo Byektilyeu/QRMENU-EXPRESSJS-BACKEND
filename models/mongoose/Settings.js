@@ -38,6 +38,17 @@ const SettingsSchema = new mongoose.Schema({
     type: Number,
     required: [true, "objID zaaval oruulna uu"],
   },
+  cashierCode: {
+    type: Number,
+    required: [true, "cashierCode zaaval oruulna uu"],
+  },
+  orderType: {
+    type: Number,
+    required: [true, "orderType zaaval oruulna uu"],
+  },
+  passToken: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Settings", SettingsSchema);
