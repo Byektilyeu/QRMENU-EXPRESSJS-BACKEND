@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const OrdersSchema = new mongoose.Schema({
   objID: {
     type: Number,
-    unique: true,
   },
   shiftNum: {
     type: Number,
@@ -14,6 +13,9 @@ const OrdersSchema = new mongoose.Schema({
   },
   transiactionInfo: {
     paymentName: {
+      type: String,
+    },
+    order_id: {
       type: String,
     },
     amount: {

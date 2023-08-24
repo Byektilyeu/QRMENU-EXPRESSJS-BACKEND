@@ -378,3 +378,113 @@ exports.payOrder = asyncHandler(async (req, res, next) => {
   req1.write(xml);
   req1.end();
 });
+
+// *********************************************************** DeleteReceipt **************************************************************
+
+exports.deleteReceipt = asyncHandler(async (req, res, next) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const guid = req.body.guid;
+  console.log(req.body);
+  const stationCode = req.body.stationCode;
+  const paymentID = req.body.paymentID;
+  const amount = req.body.amount;
+  const cashierCode = req.body.cashierCode;
+  const hostname = req.body.hostname;
+  const port = req.body.port;
+
+  const token = Buffer.from(`${username}:${password}`, "utf8").toString(
+    "base64"
+  );
+
+  const agent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+
+  const jsonObj = {
+    RK7Query: {
+      RK7CMD: {
+        _attributes: { CMD: "PayOrder" },
+        Order: {
+          _attributes: {
+            guid: guid,
+          },
+        },
+        Cashier: {
+          _attributes: {
+            id: cashierCode,
+          },
+        },
+        Station: {
+          _attributes: {
+            code: stationCode,
+          },
+        },
+        Payment: {
+          _attributes: {
+            id: paymentID,
+            amount: amount,
+          },
+        },
+      },
+    },
+  };
+  const json = JSON.stringify(jsonObj);
+
+  const xml = convert.json2xml(json, {
+    attributes_key: "_attributes",
+    compact: true,
+    spaces: 4,
+  });
+  console.log("xml ===> ", xml);
+
+  var options = {
+    method: "POST",
+    hostname: hostname,
+    port: port,
+    agent,
+    path: "/rk7api/v0/xmlinterface.xml",
+    headers: {
+      Authorization: `Basic ${token}`,
+      "Content-Type": "application/xml",
+    },
+    maxRedirects: 100,
+  };
+  var result1 = "";
+
+  var req1 = https.request(options, function (res1) {
+    var chunks = [];
+
+    res1.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
+
+    res1.on("end", function (chunk) {
+      var body = Buffer.concat(chunks);
+
+      const body1 = body.toString();
+      // console.log("body1", body1);
+      result1 = convert.xml2json(body1, {
+        compact: true,
+        spaces: 2,
+        ignoreDeclaration: true,
+        attributesKey: false,
+      });
+      // console.log("========= result 1", result1);
+      res.status(200).json({
+        success: true,
+        data: result1,
+      });
+    });
+
+    res1.on("error", function (error) {
+      console.error(error);
+    });
+  });
+
+  // var postData =
+  //   '<?xml version="1.0" encoding="UTF-8"?>\r\n<RK7Query>\r\n\t<RK7CMD CMD="PayOrder" calcBySeats="0" seat="0">\r\n\t\t<Order visit="536962263" orderIdent="256"/>\r\n\t\t<Station id="15013"/>\r\n\t\t<Cashier id="1000007"/>\r\n\t\t<Payment id="3" amount="700000"/>\r\n\t</RK7CMD>\r\n</RK7Query>';
+
+  req1.write(xml);
+  req1.end();
+});

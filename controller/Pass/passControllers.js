@@ -10,6 +10,7 @@ exports.createOrderPass = asyncHandler(async (req, res, next) => {
     amount: req.body.amount,
     callback_url: req.body.callback_url,
   });
+  console.log("order create request body: ", data);
 
   const create_order_config = {
     method: "post",
@@ -22,6 +23,7 @@ exports.createOrderPass = asyncHandler(async (req, res, next) => {
   };
 
   let createOrderResponse = await axios(create_order_config);
+  console.log("createOrderResponse:", JSON.stringify(createOrderResponse.data));
 
   res.status(200).json({
     success: true,
@@ -78,5 +80,35 @@ exports.testPass = asyncHandler(async (req, res, next) => {
   console.log("testpass: ", data);
   res.status(200).json({
     success: true,
+  });
+});
+
+// void order
+exports.voidOrder = asyncHandler(async (req, res, next) => {
+  console.log("void order", req.body);
+  const data = JSON.stringify({
+    ecommerce_token: req.body.ecommerce_token,
+    order_id: req.body.order_id,
+  });
+
+  const order_void_config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://ecomstg.pass.mn/openapi/v1/ecom/void",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+
+  let orderVoidResponse = await axios(order_void_config);
+  console.log(
+    "order void response +++++++++++++++++++++++++++++++++- > ",
+    JSON.stringify(orderVoidResponse.data)
+  );
+
+  res.status(200).json({
+    success: true,
+    data: JSON.stringify(orderVoidResponse.data),
   });
 });

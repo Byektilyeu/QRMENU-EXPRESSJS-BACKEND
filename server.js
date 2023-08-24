@@ -48,7 +48,7 @@ var accessLogStream = rfs.createStream("access.log", {
 });
 
 // cors tohirgoo
-var whitelist = ["http://10.0.0.105:3000"];
+var whitelist = ["http://10.0.0.104:3000"];
 var corsOptions = {
   origin: function (origin, callback) {
     if (origin === undefined || whitelist.indexOf(origin) !== -1) {

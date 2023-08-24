@@ -12,6 +12,7 @@ exports.insertOrderDetails = asyncHandler(async (req, res, next) => {
           visit: req.body.visit,
           transiactionInfo: {
             paymentName: "",
+            order_id: "",
             amount: "",
             approval_code: "",
             rrn: "",
@@ -83,7 +84,7 @@ exports.insertOrderDetails = asyncHandler(async (req, res, next) => {
 // });
 
 exports.insertOrderTransiactionInfo = asyncHandler(async (req, res, next) => {
-  // console.log("insertOrderPass : ", req.body);
+  console.log("insertOrderPass : ", req.body);
   Orders.findOne({ visit: req.body.visit })
     .then((doc) => {
       if (doc !== null) {
@@ -93,6 +94,7 @@ exports.insertOrderTransiactionInfo = asyncHandler(async (req, res, next) => {
             $set: {
               transiactionInfo: {
                 paymentName: req.body.paymentName,
+                order_id: req.body.extra_data.order_id,
                 amount: req.body.extra_data.amount,
                 approval_code: req.body.extra_data.approval_code,
                 rrn: req.body.extra_data.rrn,
@@ -130,6 +132,7 @@ exports.insertOrderTransiactionInfo = asyncHandler(async (req, res, next) => {
 });
 
 exports.insertPayOrder = asyncHandler(async (req, res, next) => {
+  console.log("insert pay order data ===> ", req.body);
   Orders.findOne({ visit: req.body.visit })
     .then((doc) => {
       if (doc !== null) {
@@ -173,5 +176,19 @@ exports.getShiftOrders = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: shiftOrders,
+  });
+});
+
+// void get order
+exports.getVoidOrder = asyncHandler(async (req, res, next) => {
+  const voidOrder = await Orders.find({
+    objID: req.body.objID,
+    shiftNum: req.body.shiftNum,
+    visit: req.body.visit,
+  });
+  console.log("voidOrder", voidOrder);
+  res.status(200).json({
+    success: true,
+    data: voidOrder,
   });
 });
