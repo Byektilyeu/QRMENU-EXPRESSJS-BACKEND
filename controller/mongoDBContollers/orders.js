@@ -10,6 +10,7 @@ exports.insertOrderDetails = asyncHandler(async (req, res, next) => {
           objID: req.body.objID,
           shiftNum: req.body.shiftNum,
           visit: req.body.visit,
+          status: req.body.status,
           transiactionInfo: {
             paymentName: "",
             order_id: "",
@@ -32,6 +33,9 @@ exports.insertOrderDetails = asyncHandler(async (req, res, next) => {
             orderAmount: 0,
             checkNum: 0,
             closedDate: "",
+            cashierID: 0,
+            deletedDate: "",
+            deletedPerson: "",
           },
         });
       } else {
@@ -39,6 +43,7 @@ exports.insertOrderDetails = asyncHandler(async (req, res, next) => {
           { visit: req.body.visit },
           {
             $set: {
+              status: req.body.status,
               orderDetails: {
                 orderVisit: req.body.orderVisit,
                 orderGuid: req.body.orderGuid,
@@ -92,6 +97,7 @@ exports.insertOrderTransiactionInfo = asyncHandler(async (req, res, next) => {
           { visit: req.body.visit },
           {
             $set: {
+              status: req.body.status,
               transiactionInfo: {
                 paymentName: req.body.paymentName,
                 order_id: req.body.extra_data.order_id,
@@ -109,6 +115,9 @@ exports.insertOrderTransiactionInfo = asyncHandler(async (req, res, next) => {
                 orderAmount: 0,
                 checkNum: 0,
                 closedDate: "",
+                cashierID: 0,
+                deletedDate: "",
+                deletedPerson: "",
               },
             },
           },
@@ -140,11 +149,50 @@ exports.insertPayOrder = asyncHandler(async (req, res, next) => {
           { visit: req.body.visit },
           {
             $set: {
+              status: req.body.status,
               payOrder: {
                 dDTD: req.body.dDTD,
                 orderAmount: req.body.orderAmount,
                 checkNum: req.body.checkNum,
                 closedDate: req.body.closedDate,
+                cashierID: 0,
+                deletedDate: "",
+                deletedPerson: "",
+              },
+            },
+          },
+          { new: true, runValidators: true },
+          (err, doc) => {
+            if (err) {
+              console.log("error", err);
+            }
+          }
+        );
+      } else {
+        res.status(400).json({
+          success: false,
+          error: "Уучлаарай таны захиалгын мэдээлэл олдохгүй байна!!!",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+exports.deleteReceiptSuccess = asyncHandler(async (req, res, next) => {
+  Orders.findOne({ visit: req.body.visit })
+    .then((doc) => {
+      if (doc !== null) {
+        Orders.findOneAndUpdate(
+          { visit: req.body.visit },
+          {
+            $set: {
+              status: req.body.status,
+              payOrder: {
+                cashierID: req.body.cashierID,
+                deletedDate: req.body.deletedDate,
+                deletedPerson: req.body.deletedPerson,
               },
             },
           },

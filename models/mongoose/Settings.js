@@ -49,6 +49,15 @@ const SettingsSchema = new mongoose.Schema({
   passToken: {
     type: String,
   },
+  managerID: {
+    type: String,
+  },
+  managerPassword: {
+    type: String,
+  },
+  deleteReasonID: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Settings", SettingsSchema);

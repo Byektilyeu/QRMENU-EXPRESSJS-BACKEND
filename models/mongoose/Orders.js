@@ -11,6 +11,9 @@ const OrdersSchema = new mongoose.Schema({
     type: Number,
     unique: true,
   },
+  status: {
+    type: Number,
+  },
   transiactionInfo: {
     paymentName: {
       type: String,
@@ -71,6 +74,15 @@ const OrdersSchema = new mongoose.Schema({
       type: Number,
     },
     closedDate: {
+      type: String,
+    },
+    cashierID: {
+      type: Number,
+    },
+    deletedDate: {
+      type: String,
+    },
+    deletedPerson: {
       type: String,
     },
   },

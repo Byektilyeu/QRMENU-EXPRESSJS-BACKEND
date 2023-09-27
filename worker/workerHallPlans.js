@@ -125,3 +125,10 @@ requestGetHallPlans.write(postData);
 requestGetHallPlans.end();
 
 parentPort.postMessage(resultJson);
+
+
+
+
+
+
+

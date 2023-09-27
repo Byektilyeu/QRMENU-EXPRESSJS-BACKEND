@@ -8,6 +8,7 @@ const { Worker } = require("worker_threads");
 // ********************************************get menu items r-keeper*****************************************************
 
 exports.getMenuItems = asyncHandler(async (req, res, next) => {
+  console.log("first", req.body);
   let worker = new Worker("./worker/workerMenuItems.js", {
     workerData: {
       value: req.body,

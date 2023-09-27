@@ -27,6 +27,7 @@ const restaurantsRoutes = require("./routes/restaurants");
 const shiftsRoutes = require("./routes/shifts");
 // pass routes
 const passRoutes = require("./routes/Pass/passRoutes");
+const usersRoutes = require("./routes/users");
 
 var cookieParser = require("cookie-parser");
 const helmet = require("helmet");
@@ -48,7 +49,7 @@ var accessLogStream = rfs.createStream("access.log", {
 });
 
 // cors tohirgoo
-var whitelist = ["http://10.0.0.104:3000"];
+var whitelist = ["http://10.0.0.105:3000"];
 var corsOptions = {
   origin: function (origin, callback) {
     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
@@ -107,6 +108,7 @@ app.use("/api/v1/rkeeper", orderRkeeperRoutes);
 app.use("/api/v1/restaurants", restaurantsRoutes);
 app.use("/api/v1/shifts", shiftsRoutes);
 app.use("/api/v1/pass", passRoutes);
+app.use("/api/v1/users", usersRoutes);
 
 app.use(errorHandler);
 

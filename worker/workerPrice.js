@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 var result = "";
 var resultJson = "";
+console.log("workerData.value.objID", workerData.value.IP);
 // // req body data
 const IP = workerData.value.IP;
 const PORT = workerData.value.PORT;
