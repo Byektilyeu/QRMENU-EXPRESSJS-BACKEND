@@ -17,6 +17,10 @@ const tableRoutes = require("./routes/tables");
 const menuRoutes = require("./routes/menu");
 const categoriesRoutes = require("./routes/categories");
 const menuItemsRoutes = require("./routes/menuItems");
+const modiSchemesRoutes = require("./routes/modiSchemes");
+const modiSchemeDetailsRoutes = require("./routes/modiSchemeDetails");
+const modiGroupsRoutes = require("./routes/modiGroups");
+const modifiersRoutes = require("./routes/modifiers");
 const priceRoutes = require("./routes/price");
 // const getOrderRoutes = require("./routes/rKOrderMenu");
 // const monpayRoutes = require("./routes/monpay");
@@ -27,6 +31,7 @@ const restaurantsRoutes = require("./routes/restaurants");
 const shiftsRoutes = require("./routes/shifts");
 // pass routes
 const passRoutes = require("./routes/Pass/passRoutes");
+const greenGroupUsersRoutes = require("./routes/GreenGroupRoutes/greenGroupUsers");
 const usersRoutes = require("./routes/users");
 
 var cookieParser = require("cookie-parser");
@@ -49,7 +54,7 @@ var accessLogStream = rfs.createStream("access.log", {
 });
 
 // cors tohirgoo
-var whitelist = ["http://10.0.0.103:3000"];
+var whitelist = ["http://10.0.0.108:3000"];
 var corsOptions = {
   origin: function (origin, callback) {
     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
@@ -69,7 +74,7 @@ var corsOptions = {
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 15 minutes
-  max: 3000, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  max: 6000, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
   message: "15 Минутанд 3 удаа л хандах боломжтой",
   // standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   // legacyHeaders: false, // Disable the `X-RateLimit-*` headers
@@ -99,6 +104,12 @@ app.use("/api/v1/hallplans", hallPlanRoutes);
 app.use("/api/v1/tables", tableRoutes);
 app.use("/api/v1/menu", menuRoutes);
 app.use("/api/v1/menuitems", menuItemsRoutes);
+
+app.use("/api/v1/modischemes", modiSchemesRoutes);
+app.use("/api/v1/modischemedetails", modiSchemeDetailsRoutes);
+app.use("/api/v1/modigroups", modiGroupsRoutes);
+app.use("/api/v1/modifiers", modifiersRoutes);
+
 app.use("/api/v1/price", priceRoutes);
 app.use("/api/v1/settings", settingsRoutes);
 // app.use("/api/v1/getorder", getOrderRoutes);
@@ -109,6 +120,7 @@ app.use("/api/v1/restaurants", restaurantsRoutes);
 app.use("/api/v1/shifts", shiftsRoutes);
 app.use("/api/v1/pass", passRoutes);
 app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/greengroupusers", greenGroupUsersRoutes);
 
 app.use(errorHandler);
 

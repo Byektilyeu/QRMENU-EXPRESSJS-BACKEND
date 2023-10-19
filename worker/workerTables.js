@@ -23,17 +23,10 @@ const MongoConnect = async () => {
         useUnifiedTopology: true,
       }
     )
-    .then(() => console.log("MongoDB Connected hallplans..."))
+    .then(() => console.log("MongoDB Connected tables..."))
     .catch((err) => console.log(err));
 };
 MongoConnect();
-
-// const IP = "10.0.0.104";
-// const PORT = 8086;
-// const username = "http_user1";
-// const password = 9;
-// const objID = 992500001;
-// var resultTable = "";
 
 // token
 const token = Buffer.from(`${username}:${password}`, "utf8").toString("base64");
@@ -75,7 +68,7 @@ var requestGetTable = https.request(options, function (responseTable) {
     resultsTable =
       resultJsonTable.RK7QueryResult.CommandResult.RK7Reference.Items.Item;
     resultsTable.map(function (dataTable) {
-      console.log("table idents: " + dataTable._attributes.Ident);
+      // console.log("table idents: " + dataTable._attributes.Ident);
       //insert or update table data -> mongoDB
       Table.findOne({ tableIdent: dataTable._attributes.Ident })
         .then((doc) => {

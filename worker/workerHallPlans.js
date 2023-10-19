@@ -27,11 +27,6 @@ const MongoConnect = async () => {
 };
 MongoConnect();
 
-// const IP = "10.0.0.104";
-// const PORT = 8086;
-// const username = "http_user1";
-// const password = 9;
-// const objID = 992500001;
 // token
 const token = Buffer.from(`${username}:${password}`, "utf8").toString("base64");
 
@@ -77,7 +72,7 @@ var requestGetHallPlans = https.request(options, function (response) {
     var results = [];
     results = resultJson.RK7QueryResult.CommandResult.RK7Reference.Items.Item;
     results.map(function (data) {
-      console.log("hall plan idents: " + data._attributes.Ident);
+      // console.log("hall plan idents: " + data._attributes.Ident);
 
       // insert or update hallplane data  -> mongoDB
       HallPlans.findOne({ hallplansIdent: data._attributes.Ident })
@@ -125,10 +120,3 @@ requestGetHallPlans.write(postData);
 requestGetHallPlans.end();
 
 parentPort.postMessage(resultJson);
-
-
-
-
-
-
-

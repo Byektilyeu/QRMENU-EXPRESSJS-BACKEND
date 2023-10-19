@@ -1,18 +1,20 @@
 const { parentPort, workerData } = require("worker_threads");
 var convert = require("xml-js");
-const Price = require("../models/mongoose/Price");
+const Modifiers = require("../models/mongoose/Modifiers");
 var https = require("follow-redirects").https;
 const mongoose = require("mongoose");
 
 var result = "";
 var resultJson = "";
-// console.log("workerData.value.objID", workerData.value.IP);
-// // req body data
+
+// req body data
 const IP = workerData.value.IP;
 const PORT = workerData.value.PORT;
 const username = workerData.value.username;
 const password = workerData.value.password;
 const objID = workerData.value.objID;
+
+// console.log(" workerData Modifiers ==> ", workerData.value);
 
 const MongoConnect = async () => {
   mongoose.set("strictQuery", false);
@@ -24,7 +26,7 @@ const MongoConnect = async () => {
         useUnifiedTopology: true,
       }
     )
-    .then(() => console.log("MongoDB Connected Price..."))
+    .then(() => console.log("MongoDB Connected Modifiers..."))
     .catch((err) => console.log(err));
 };
 MongoConnect();
@@ -51,8 +53,8 @@ var options = {
   maxRedirects: 0,
 };
 
-//  requestGetPrice request / -> r-keeper /
-var requestGetPrice = https.request(options, function (response) {
+// get menu items request / -> r-keeper /
+var requestGetModifiers = https.request(options, function (response) {
   var chunks = [];
 
   response.on("data", function (chunk) {
@@ -70,28 +72,36 @@ var requestGetPrice = https.request(options, function (response) {
       attributesKey: false,
     });
 
-    var resultJson = JSON.parse(result);
+    resultJson = JSON.parse(result);
     var results = [];
-    results = resultJson.RK7QueryResult.Dishes.Item;
-    results.map(function (data) {
-      var identOrderMenu = data._attributes.Ident;
-      var priceOrderMenu = data._attributes.Price;
-
-      Price.findOne({ identOrderMenu: identOrderMenu })
+    results = resultJson.RK7QueryResult.CommandResult.RK7Reference.Items.Item;
+    // console.log("results Modifiers ==> ", results);
+    results.map(function (rkdata) {
+      Modifiers.findOne({ id: rkdata._attributes.Ident })
         .then((doc) => {
           if (doc === null) {
-            Price.insertMany({
+            Modifiers.insertMany({
               objID: objID,
-              identOrderMenu: identOrderMenu,
-              priceOrderMenu: priceOrderMenu,
+              id: rkdata._attributes.Ident,
+              max_one_dish: rkdata._attributes.MaxOneDish,
+              use_limited_qnt: rkdata._attributes.UseLimitedQnt,
+              modi_group_id: rkdata._attributes.MainParentIdent,
+              menu_item_id: rkdata._attributes.Dish,
+              name: rkdata._attributes.Name,
+              code: rkdata._attributes.Code,
             });
           } else {
-            Price.findOneAndUpdate(
-              { identOrderMenu: identOrderMenu },
+            Modifiers.findOneAndUpdate(
+              { id: rkdata._attributes.Ident },
               {
                 $set: {
-                  identOrderMenu: identOrderMenu,
-                  priceOrderMenu: priceOrderMenu,
+                  id: rkdata._attributes.Ident,
+                  max_one_dish: rkdata._attributes.MaxOneDish,
+                  use_limited_qnt: rkdata._attributes.UseLimitedQnt,
+                  modi_group_id: rkdata._attributes.MainParentIdent,
+                  menu_item_id: rkdata._attributes.Dish,
+                  name: rkdata._attributes.Name,
+                  code: rkdata._attributes.Code,
                 },
               },
               { new: true, runValidators: true },
@@ -99,7 +109,6 @@ var requestGetPrice = https.request(options, function (response) {
                 if (err) {
                   console.log("error", err);
                 }
-                // console.log("updated", doc);
               }
             );
           }
@@ -116,8 +125,9 @@ var requestGetPrice = https.request(options, function (response) {
 });
 
 var postData =
-  '<?xml version="1.0" encoding="utf-8"?>\r\n<RK7Query>\r\n<RK7CMD CMD="GetOrderMenu" >\r\n<Station code="1"/>\r\n</RK7CMD>\r\n</RK7Query>';
+  '<?xml version="1.0" encoding="utf-8"?><RK7Query>   <RK7Command CMD="GetRefData" RefName="Modifiers" OnlyActive="1" MacroPropTags="true"   WithMacroProp="1" PropMask="Items.(Ident, ItemIdent, MaxOneDish, UseLimitedQnt, Name, Code, MainParentIdent, Dish  )" ></RK7Command></RK7Query>';
 
-requestGetPrice.write(postData);
-requestGetPrice.end();
+requestGetModifiers.write(postData);
+requestGetModifiers.end();
+
 parentPort.postMessage(resultJson);

@@ -18,8 +18,11 @@ const MenuItemsSchema = new mongoose.Schema({
   altName: {
     type: String,
   },
-  modiSchema: {
+  modiSchemeID: {
     type: Number,
+  },
+  saleObjectType: {
+    type: String,
   },
   mainParentIdent: {
     type: Number,

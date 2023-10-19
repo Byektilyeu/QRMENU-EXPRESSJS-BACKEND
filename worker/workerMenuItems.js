@@ -15,7 +15,7 @@ const username = workerData.value.username;
 const password = workerData.value.password;
 const objID = workerData.value.objID;
 
-console.log(" workerData ==> ", workerData.value);
+// console.log(" workerData ==> ", workerData.value);
 
 const MongoConnect = async () => {
   mongoose.set("strictQuery", false);
@@ -27,16 +27,10 @@ const MongoConnect = async () => {
         useUnifiedTopology: true,
       }
     )
-    .then(() => console.log("MongoDB Connected menu items..."))
+    .then(() => console.log("MongoDB Connected menu items and categories..."))
     .catch((err) => console.log(err));
 };
 MongoConnect();
-
-// const IP = "10.0.0.104";
-// const PORT = 8086;
-// const username = "http_user1";
-// const password = 9;
-// const objID = 992500001;
 
 // token
 const token = Buffer.from(`${username}:${password}`, "utf8").toString("base64");
@@ -82,10 +76,10 @@ var requestGetMenuItems = https.request(options, function (response) {
     resultJson = JSON.parse(result);
     var results = [];
     results = resultJson.RK7QueryResult.CommandResult;
-    console.log("results ==> ", results);
+    // console.log("results ==> ", results);
     results.map(function (rkdata, index) {
       var className = rkdata.RK7Reference._attributes.ClassName;
-      console.log(" className ==> ", className);
+      // console.log(" className ==> ", className);
       switch (className) {
         // Category list-ийг r-keeper-ийн response-оос авах
         case "TCategListItems":
@@ -155,9 +149,10 @@ var requestGetMenuItems = https.request(options, function (response) {
             var menuIdent = menuItems._attributes.Ident;
             var code = menuItems._attributes.Code;
             var altName = menuItems._attributes.AltName;
-            var modiSchema = menuItems._attributes.ModiSchema;
             var mainParentIdent = menuItems._attributes.MainParentIdent;
             var comment = menuItems._attributes.Comment;
+            var saleObjectType = menuItems._attributes.SaleObjectType;
+            var modiSchemeID = menuItems._attributes.ModiScheme;
             var genname0450 = "";
             var genname0409 = "";
             var genForWeb = "";
@@ -196,7 +191,8 @@ var requestGetMenuItems = https.request(options, function (response) {
                     menuIdent: menuIdent,
                     code: code,
                     altName: altName,
-                    modiSchema: modiSchema,
+                    modiSchemeID: modiSchemeID,
+                    saleObjectType: saleObjectType,
                     mainParentIdent: mainParentIdent,
                     comment: comment,
                     genname0450: genname0450,
@@ -212,7 +208,8 @@ var requestGetMenuItems = https.request(options, function (response) {
                         name: name,
                         code: code,
                         altName: altName,
-                        modiSchema: modiSchema,
+                        modiSchemeID: modiSchemeID,
+                        saleObjectType: saleObjectType,
                         mainParentIdent: mainParentIdent,
                         comment: comment,
                         genname0450: genname0450,
@@ -248,7 +245,7 @@ var requestGetMenuItems = https.request(options, function (response) {
 });
 
 var postData =
-  '<?xml version="1.0" encoding="utf-8"?>\r\n<RK7Query>\r\n    <RK7Command CMD="GetRefData" RefName="CategList" OnlyActive="1" MacroPropTags="true"   WithMacroProp="1" PropMask="Items.(Ident, Name,  Comment, genname0450, genName0409, genForWeb, genSortForWeb, genDescription0409, genDescription0450, genNutValues0409, genNutValues0450, GUIDString)" ></RK7Command>\r\n    <RK7Command CMD="GetRefData" RefName="menuitems" OnlyActive="1" MacroPropTags="true"   WithMacroProp="1" PropMask="Items.(Ident,Code,Name, AltName, ModiScheme,SaleObjectType, mainParentIdent, LargeImagePath, Comment, CategPath, genFiskBar, genname0450, genName0409, genForWeb, genSortForWeb, RecommendedMenuItems, genDescription0409, genDescription0450, genNutValues0409, genNutValues0450, PropCLASSIFICATORGROUPS, GUIDString )" ></RK7Command>\r\n    <RK7Command CMD="GetRefData" RefName="ModiSchemes" IgnoreDefaults="1" IgnoreEnums="0" MacroPropTags="true" OnlyActive="1" WithChildItems="3" PropMask="items.(Ident,Code, Name),items.RIChildItems.TModiSchemeDetail(Ident, ModiScheme,ModiGroup, ReadOnlyName, UpLimit, DownLimit, GUIDString)">\r\n        <PROPFILTERS>\r\n            <PROPFILTER Name="ModiSchemeType" Value="mstCombo"></PROPFILTER>\r\n        </PROPFILTERS>\r\n    </RK7Command>\r\n    <RK7Command CMD="GetRefData" RefName="ModiGroups" OnlyActive="1" IgnoreEnums="false" MacroPropTags="true" WithBlobsData="true" WithChildItems="3" WithMacroProp="true" PropMask="items.(Ident,Name,Code,genName0409, genName0450, genSortForWeb ),items.RIChildItems.TModifier(ItemIdent, Ident, Name, Code, MainParentIdent, Dish, Comment, genName0409, genName0450, genSortForWeb, genDescription0409, genDescription0450, genNutValues0409, genNutValues0450, GUIDString)">\r\n        <PROPFILTERS>\r\n            <PROPFILTER Name="ModiGroupType" Value="mgtCombo"></PROPFILTER>\r\n        </PROPFILTERS>\r\n    </RK7Command>\r\n    <RK7Command CMD="GetRefData" RefName="Prices" ></RK7Command>\r\n</RK7Query>"';
+  '<?xml version="1.0" encoding="utf-8"?>\r\n<RK7Query>\r\n    <RK7Command CMD="GetRefData" RefName="CategList" OnlyActive="1" MacroPropTags="true"   WithMacroProp="1" PropMask="Items.(Ident, Name,  Comment, genname0450, genName0409, genForWeb, genSortForWeb, genDescription0409, genDescription0450, genNutValues0409, genNutValues0450, GUIDString)" ></RK7Command>\r\n    <RK7Command CMD="GetRefData" RefName="menuitems" OnlyActive="1" MacroPropTags="true"   WithMacroProp="1" PropMask="Items.(Ident,Code,Name, AltName, ModiScheme,SaleObjectType, mainParentIdent, LargeImagePath, Comment, CategPath, genFiskBar, genname0450, genName0409, genForWeb, genSortForWeb, RecommendedMenuItems, genDescription0409, genDescription0450, genNutValues0409, genNutValues0450, PropCLASSIFICATORGROUPS, GUIDString )" ></RK7Command>\r\n</RK7Query>"';
 
 requestGetMenuItems.write(postData);
 requestGetMenuItems.end();

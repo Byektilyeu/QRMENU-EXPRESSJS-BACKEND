@@ -106,10 +106,10 @@ function intervalFunc() {
           if (resultJson.RK7QueryResult._attributes.RK7ErrorN == "2172") {
             console.log("Undsen eelj haagdaj bna");
           } else {
-            console.log(
-              "shift number: ",
-              resultJson.RK7QueryResult.SystemInfo.CommonShift._attributes
-            );
+            // console.log(
+            //   "shift number: ",
+            //   resultJson.RK7QueryResult.SystemInfo.CommonShift._attributes
+            // );
 
             Shifts.findOne({
               objID: resultJson.RK7QueryResult.SystemInfo._attributes.RestCode,
@@ -128,12 +128,12 @@ function intervalFunc() {
                   resultJson.RK7QueryResult.SystemInfo.CommonShift._attributes
                     .ShiftNum != doc.shiftNum
                 ) {
-                  console.log(
-                    "123",
-                    resultJson.RK7QueryResult.SystemInfo.CommonShift._attributes
-                      .ShiftNum
-                  );
-                  console.log("456", doc.shiftNum);
+                  // console.log(
+                  //   "123",
+                  //   resultJson.RK7QueryResult.SystemInfo.CommonShift._attributes
+                  //     .ShiftNum
+                  // );
+                  // console.log("456", doc.shiftNum);
                   // pass token baigaa esehiig shalgah code
                   // pass token baigaa esehiig shalgah code
                   // pass token baigaa esehiig shalgah code
@@ -183,7 +183,7 @@ function intervalFunc() {
         });
 
         res.on("error", function (error) {
-          console.error("eroror ____________________ ", error);
+          // console.error("eroror ____________________ ", error);
         });
       });
 
@@ -192,12 +192,12 @@ function intervalFunc() {
 
       req.write(postData);
       req.on("error", function (e) {
-        console.error("errrrrrr______________________ ", e);
+        // console.error("errrrrrr______________________ ", e);
       });
       req.end();
     });
   };
   getSettings();
-  console.log("2");
+  // console.log("2");
 }
 setInterval(intervalFunc, 20000);
